@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "relay": "relay-compiler --src ./src --schema path/schema.graphql",
+    "relay": "relay-compiler --src ./src --schema ./schema.json",
     "webpack-dev": "webpack --watch",
     "start": "nodemon server.js --exec babel-node",
     "test": "echo \"Error: no test specified\" && exit 1"
