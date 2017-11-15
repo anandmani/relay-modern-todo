@@ -11,8 +11,11 @@ export const schema = buildSchema(`
     title: String
     status: String
   }
+  type App{
+    todos(status: String): [Todo]
+  }
   type Query{
-    getTodos(status: String): [Todo]
+    app: App
   }
   type Mutation{
     addTodo(input: TodoInput): Todo
@@ -21,19 +24,26 @@ export const schema = buildSchema(`
   }
 `)
 
-export const getResolver = (db) => ({
-
-  getTodos: async ({ status }) => {
+class App {
+  constructor(db) {
+    this.db = db
+  }
+  async todos({ status }) {
     let findObj = {}
     if (status) {
       findObj.status = new RegExp(status, 'i')
     }
-    let todos = await db.collection('todos').find(findObj).toArray()
+    let todos = await this.db.collection('todos').find(findObj).toArray()
     return todos.map(todo => ({
       id: todo._id,
       ...todo
     }))
-  },
+  }
+}
+
+export const getResolver = (db) => ({
+
+  app: () => new App(db),
 
   addTodo: async ({ input }) => {
     let { title, status } = input
@@ -75,7 +85,7 @@ export const getResolver = (db) => ({
 /* Graphiql queries and mutations:
 
 {
-  getTodos(status: "active") {
+  todos(status: "active") {
     id,
     title,
     status

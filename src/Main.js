@@ -1,45 +1,32 @@
+//Don't name file index.js. Some problem while name queries <filename><Query> format
+
+import ReactDOM from 'react-dom'
 import React, { PureComponent } from 'react'
+import { QueryRenderer, graphql } from 'react-relay'
+import environment from './environment'
+import App from './App'
 
-class Main extends PureComponent {
+import { installRelayDevTools } from 'relay-devtools'
+// installRelayDevTools()
 
-  renderRow = (todo) => (
-    <li key={todo}>
-      <div>
-        todo
-        <button>X</button>
-      </div>
-    </li>
-  )
-
-  render() {
-    const todos = ['1', '2']
-    return (
-      <div>
-        Todos:
-        <br />
-        <input ref='addRef' placeholder='Add todo..' />
-        <ul>
-          {
-            todos.map(this.renderRow)
+ReactDOM.render(
+  <QueryRenderer
+    environment={environment}
+    query={graphql`
+        query MainQuery{
+          app{
+            ...App
           }
-        </ul>
-        <div>
-          Filter:
-          <select defaultValue='All'>
-            <option value="All">All</option>
-            <option value="Active">Active</option>
-            <option value="Completed">Completed</option>
-          </select>
-        </div>
-        Page Number:
-        <select defaultValue='1'>
-          <option value='1'>1</option>
-          <option value='2'>2</option>
-        </select>
-      </div>
-    )
-  }
-
-}
-
-export default Main
+        }
+      `}
+    render={({ error, props }) => {
+      if (error) {
+        return <div>{error.message}</div>
+      } else if (props) {
+        return <App data={props.app} />
+      }
+      return <div>Loading...</div>
+    }}
+  />,
+  document.getElementById('react')
+)

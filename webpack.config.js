@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/index.js',
+  entry: './src/main.js',
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'public')
@@ -14,12 +14,12 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['env'],
             plugins: [
+              "relay",
               "transform-class-properties",
-              "transform-react-jsx",
-              "relay"
-            ]
+              "transform-react-jsx"
+            ],
+            presets: ['env']
           }
         }
       }
