@@ -1,31 +1,9 @@
 import { buildSchema, GraphQLID, GraphQLString } from 'graphql'
-
-const todos = [
-  {
-    id: 0,
-    title: 'Gym',
-    status: 'Active'
-  },
-  {
-    id: 1,
-    title: 'Study',
-    status: 'Active'
-  },
-  {
-    id: 2,
-    title: 'Dinner',
-    status: 'Active'
-  },
-  {
-    id: 3,
-    title: 'Sleep',
-    status: 'Active'
-  }
-]
+import { ObjectID } from 'mongodb'
 
 export const schema = buildSchema(`
   type Todo{
-    id: Int!
+    id: String!
     title: String
     status: String
   }
@@ -34,70 +12,84 @@ export const schema = buildSchema(`
     status: String
   }
   type Query{
-    getTodos: [Todo]
+    getTodos(status: String): [Todo]
   }
   type Mutation{
-    addTodo(input: TodoInput): [Todo]
-    toggleTodo(id: Int!): [Todo]
-    deleteTodo(id: Int!): [Todo]
+    addTodo(input: TodoInput): Todo
+    updateTodo(id: String!, status: String!): Todo
+    deleteTodo(id: String!): String
   }
 `)
 
-export const resolver = {
+export const getResolver = (db) => ({
 
-  getTodos: () => todos,
+  getTodos: async ({ status }) => {
+    let findObj = {}
+    if (status) {
+      findObj.status = new RegExp(status, 'i')
+    }
+    let todos = await db.collection('todos').find(findObj).toArray()
+    return todos.map(todo => ({
+      id: todo._id,
+      ...todo
+    }))
+  },
 
-  addTodo: ({ input }) => {
+  addTodo: async ({ input }) => {
     let { title, status } = input
-    todos.push({
-      id: todos.length,
-      title,
-      status
-    })
-    return todos
+    let response = await db.collection('todos').insertOne({ title, status })
+    let todo = response.ops[0]
+    return {
+      id: todo._id,
+      ...todo
+    }
   },
 
-  toggleTodo: ({ id }) => {
-    let todo = todos.filter(todo => todo.id === id)[0]
-    todo.status = todo.status === 'Active' ? 'Completed' : 'Active'
-    return todos
-  },
-
-  deleteTodo: ({ id }) => {
-    let deleteIndex
-    todos.some((todo, index) => {
-      if (todo.id === id) {
-        deleteIndex = index
-        return true
+  updateTodo: async ({ id, status }) => {
+    let findObj = { _id: new ObjectID(id) }
+    let updateObj = { $set: { status } }
+    let response = await db.collection('todos').findOneAndUpdate(findObj, updateObj, { returnOriginal: false })
+    let { value: todo } = response
+    if (!response.lastErrorObject) {
+      throw err
+    }
+    else {
+      return {
+        id: todo._id,
+        ...todo
       }
-      return false
-    })
-    console.log("deleteIndex", deleteIndex)
-    if (deleteIndex) todos.splice(deleteIndex, 1)
-    return todos
+    }
+  },
+
+  deleteTodo: async ({ id }) => {
+    let findObj = { _id: new ObjectID(id) }
+    try {
+      let response = await db.collection('todos').removeOne(findObj)
+    } catch (err) {
+      throw (err)
+    }
+    return "Success"
   }
-}
+})
 
 /* Graphiql queries and mutations:
 
 {
-  getTodos {
+  getTodos(status: "active") {
     id,
     title,
     status
   }
 }
 
-mutation{
-  deleteTodo(id: 2) {
-    id
-  }
+mutation {
+  deleteTodo(id: "5a0c2b0e93a72851aba392dd")
 }
 
 mutation{
-	toggleTodo(id: 3) {
-    id,
-    title,
+  updateTodo(id: "5a0c176bf36d283a6cbc1f89", status: "Active"){
+    id
+    title
     status
   }
 }
