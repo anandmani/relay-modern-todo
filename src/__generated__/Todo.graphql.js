@@ -10,8 +10,8 @@
 import type {ConcreteFragment} from 'relay-runtime';
 export type Todo = {|
   +id: string;
-  +title: ?string;
-  +status: ?string;
+  +title: string;
+  +status: string;
 |};
 */
 

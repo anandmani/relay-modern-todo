@@ -4,12 +4,19 @@ import { ObjectID } from 'mongodb'
 export const schema = buildSchema(`
   type Todo{
     id: String!
-    title: String
-    status: String
+    title: String!
+    status: String!
   }
   input TodoInput{
-    title: String
+    title: String!
     status: String
+  }
+  input UpdateTodoInput{
+    id: String!
+    status: String!
+  }
+  input DeleteTodoInput{
+    id: String!
   }
   type App{
     todos(status: String): [Todo]
@@ -19,8 +26,8 @@ export const schema = buildSchema(`
   }
   type Mutation{
     addTodo(input: TodoInput): Todo
-    updateTodo(id: String!, status: String!): Todo
-    deleteTodo(id: String!): String
+    updateTodo(input: UpdateTodoInput): Todo
+    deleteTodo(input: DeleteTodoInput): String
   }
 `)
 
@@ -55,7 +62,8 @@ export const getResolver = (db) => ({
     }
   },
 
-  updateTodo: async ({ id, status }) => {
+  updateTodo: async ({ input }) => {
+    let { id, status } = input
     let findObj = { _id: new ObjectID(id) }
     let updateObj = { $set: { status } }
     let response = await db.collection('todos').findOneAndUpdate(findObj, updateObj, { returnOriginal: false })
@@ -71,7 +79,8 @@ export const getResolver = (db) => ({
     }
   },
 
-  deleteTodo: async ({ id }) => {
+  deleteTodo: async ({ input }) => {
+    let { id } = input
     let findObj = { _id: new ObjectID(id) }
     try {
       let response = await db.collection('todos').removeOne(findObj)
