@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 42df9c6b3bd9a1a1b0014a5fb6422f18
+ * @relayHash 7abf34220f0ad6ad0938b74006ae8530
  */
 
 /* eslint-disable */
@@ -24,10 +24,14 @@ query MainQuery {
 
 fragment App on App {
   todos {
-    id
-    title
-    status
+    ...Todo
   }
+}
+
+fragment Todo on Todo {
+  id
+  title
+  status
 }
 */
 
@@ -84,25 +88,31 @@ const batch /*: ConcreteBatch*/ = {
             "plural": true,
             "selections": [
               {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "id",
-                "storageKey": null
-              },
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "title",
-                "storageKey": null
-              },
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "args": null,
-                "name": "status",
-                "storageKey": null
+                "kind": "InlineFragment",
+                "type": "Todo",
+                "selections": [
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
+                    "args": null,
+                    "name": "id",
+                    "storageKey": null
+                  },
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
+                    "args": null,
+                    "name": "title",
+                    "storageKey": null
+                  },
+                  {
+                    "kind": "ScalarField",
+                    "alias": null,
+                    "args": null,
+                    "name": "status",
+                    "storageKey": null
+                  }
+                ]
               }
             ],
             "storageKey": null
@@ -112,7 +122,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query MainQuery {\n  app {\n    ...App\n  }\n}\n\nfragment App on App {\n  todos {\n    id\n    title\n    status\n  }\n}\n"
+  "text": "query MainQuery {\n  app {\n    ...App\n  }\n}\n\nfragment App on App {\n  todos {\n    ...Todo\n  }\n}\n\nfragment Todo on Todo {\n  id\n  title\n  status\n}\n"
 };
 
 module.exports = batch;

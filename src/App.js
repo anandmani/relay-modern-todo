@@ -1,19 +1,12 @@
 import React, { PureComponent } from 'react'
 import { createFragmentContainer, graphql } from 'react-relay'
+import Todo from './Todo'
 
 class App extends PureComponent {
 
-  renderRow = (todo) => (
-    <li key={todo.id}>
-      <div>
-        {todo.title}
-        <button>X</button>
-      </div>
-    </li>
-  )
+  renderRow = (todo) => <Todo key={todo.__id} data={todo} />
 
   render() {
-    console.log("this.props", this.props)
     return (
       <div>
         Todos:
@@ -48,9 +41,7 @@ export default createFragmentContainer(
   graphql`
     fragment App on App{
       todos{
-        id
-        title
-        status
+        ...Todo
       }
     }
   `
