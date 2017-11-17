@@ -6,7 +6,7 @@ import { QueryRenderer, graphql } from 'react-relay'
 import environment from './environment'
 import App from './App'
 
-import { installRelayDevTools } from 'relay-devtools'
+// import { installRelayDevTools } from 'relay-devtools'
 // installRelayDevTools()
 
 ReactDOM.render(

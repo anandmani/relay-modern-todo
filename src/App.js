@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { createFragmentContainer, graphql } from 'react-relay'
+import { createFragmentContainer, createRefetchContainer, graphql } from 'react-relay'
 import Todo from './Todo'
 import * as AddTodoMutation from './mutations/AddTodoMutation'
 
@@ -15,7 +15,17 @@ class App extends PureComponent {
     this.refs.addRef.value = ''
   }
 
+  handleFilter = (e) => {
+    const status = e.target.value
+    console.log("filter by", status)
+    const refetchVariables = {
+      status
+    }
+    this.props.relay.refetch(refetchVariables)
+  }
+
   render() {
+    console.log("rendering", this.props)
     return (
       <div>
         Todos:
@@ -31,8 +41,8 @@ class App extends PureComponent {
         </ul>
         <div>
           Filter:
-          <select defaultValue='All'>
-            <option value="All">All</option>
+          <select defaultValue="" onChange={this.handleFilter}>
+            <option value="">All</option>
             <option value="Active">Active</option>
             <option value="Completed">Completed</option>
           </select>
@@ -48,16 +58,36 @@ class App extends PureComponent {
 
 }
 
-export default createFragmentContainer(
+export default createRefetchContainer(
   App,
   graphql`
-    fragment App on App{
-      todos{
+    fragment App on App @argumentDefinitions( status: {type: "String", defaultValue: ""}){
+      todos(status: $status){
         ...Todo
       }
     }
   `
+  ,
+  graphql`
+    query AppRefetchQuery($status: String){
+      app{
+        ...App @arguments(status: $status)
+      }
+    }
+  `
 )
+
+
+// export default createFragmentContainer(
+//   App,
+//   graphql`
+//     fragment App on App{
+//       todos{
+//         ...Todo
+//       }
+//     }
+//   `
+// )
 
 // fragment App_propname
 //not giving prop name, defaults to 'data' prop
