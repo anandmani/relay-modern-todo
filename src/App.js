@@ -5,7 +5,7 @@ import * as AddTodoMutation from './mutations/AddTodoMutation'
 
 class App extends PureComponent {
 
-  renderRow = (todo) => <Todo key={todo.__id} data={todo} />
+  renderRow = (todo) => todo ? <Todo key={todo.__id} data={todo} /> : null
 
   handleAdd = (e) => {
     e.preventDefault()
@@ -25,7 +25,7 @@ class App extends PureComponent {
   }
 
   render() {
-    console.log("rendering", this.props)
+    // console.log("App", this.props.relay.environment.getStore().getSource())
     return (
       <div>
         Todos:
@@ -58,36 +58,36 @@ class App extends PureComponent {
 
 }
 
-export default createRefetchContainer(
-  App,
-  graphql`
-    fragment App on App @argumentDefinitions( status: {type: "String", defaultValue: ""}){
-      todos(status: $status){
-        ...Todo
-      }
-    }
-  `
-  ,
-  graphql`
-    query AppRefetchQuery($status: String){
-      app{
-        ...App @arguments(status: $status)
-      }
-    }
-  `
-)
-
-
-// export default createFragmentContainer(
+// export default createRefetchContainer(
 //   App,
 //   graphql`
-//     fragment App on App{
-//       todos{
+//     fragment App on App @argumentDefinitions( status: {type: "String", defaultValue: ""}){
+//       todos(status: $status){
 //         ...Todo
+//       }
+//     }
+//   `
+//   ,
+//   graphql`
+//     query AppRefetchQuery($status: String){
+//       app{
+//         ...App @arguments(status: $status)
 //       }
 //     }
 //   `
 // )
 
+
+export default createFragmentContainer(
+  App,
+  graphql`
+    fragment App on App{
+      todos{
+        ...Todo
+      }
+    }
+  `
+)
+
 // fragment App_propname
-//not giving prop name, defaults to 'data' prop
+// not giving prop name, defaults to 'data' prop

@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash d0cf57f506bb89a58c511f044da93093
+ * @relayHash 7abf34220f0ad6ad0938b74006ae8530
  */
 
 /* eslint-disable */
@@ -23,7 +23,7 @@ query MainQuery {
 }
 
 fragment App on App {
-  todos(status: "") {
+  todos {
     ...Todo
   }
 }
@@ -82,14 +82,7 @@ const batch /*: ConcreteBatch*/ = {
           {
             "kind": "LinkedField",
             "alias": null,
-            "args": [
-              {
-                "kind": "Literal",
-                "name": "status",
-                "value": "",
-                "type": "String"
-              }
-            ],
+            "args": null,
             "concreteType": "Todo",
             "name": "todos",
             "plural": true,
@@ -122,14 +115,14 @@ const batch /*: ConcreteBatch*/ = {
                 ]
               }
             ],
-            "storageKey": "todos{\"status\":\"\"}"
+            "storageKey": null
           }
         ],
         "storageKey": null
       }
     ]
   },
-  "text": "query MainQuery {\n  app {\n    ...App\n  }\n}\n\nfragment App on App {\n  todos(status: \"\") {\n    ...Todo\n  }\n}\n\nfragment Todo on Todo {\n  id\n  title\n  status\n}\n"
+  "text": "query MainQuery {\n  app {\n    ...App\n  }\n}\n\nfragment App on App {\n  todos {\n    ...Todo\n  }\n}\n\nfragment Todo on Todo {\n  id\n  title\n  status\n}\n"
 };
 
 module.exports = batch;
