@@ -29,20 +29,22 @@ export function commit(environment, title, args) {
       },
       onError: err => console.error(err),
       updater: (proxyStore, data) => {
-        let addTodoProxy = proxyStore.getRootField('addTodo')
-        
-        const rootProxy = proxyStore.getRoot()
-        let appProxy = rootProxy.getLinkedRecord('app')
-        let todosProxy = appProxy.getLinkedRecords('todos', args)
-        appProxy.setLinkedRecords([...todosProxy, addTodoProxy], 'todos', args)
+        if (args.status !== 'Completed') { //Update the local store with new todo only if user is viewing all/active todos. If he is viewing completed todos, he will fetch the new todo when he changes to all/active
+          let addTodoProxy = proxyStore.getRootField('addTodo')
+          const rootProxy = proxyStore.getRoot()
+          let appProxy = rootProxy.getLinkedRecord('app')
+          let todosProxy = appProxy.getLinkedRecords('todos', args)
+          appProxy.setLinkedRecords([...todosProxy, addTodoProxy], 'todos', args)
+        }
       },
       optimisticUpdater: (proxyStore) => {
-        const optimisticNodeProxy = proxyStore.get(optimisticID)
-
-        const rootProxy = proxyStore.getRoot()
-        let appProxy = rootProxy.getLinkedRecord('app')
-        let todosProxy = appProxy.getLinkedRecords('todos', args)
-        appProxy.setLinkedRecords([...todosProxy, optimisticNodeProxy], 'todos', args)
+        if (args.status !== 'Completed') { //Update the local store with new todo only if user is viewing all/active todos. If he is viewing completed todos, he will fetch the new todo when he changes to all/active
+          const optimisticNodeProxy = proxyStore.get(optimisticID)
+          const rootProxy = proxyStore.getRoot()
+          let appProxy = rootProxy.getLinkedRecord('app')
+          let todosProxy = appProxy.getLinkedRecords('todos', args)
+          appProxy.setLinkedRecords([...todosProxy, optimisticNodeProxy], 'todos', args)
+        }
       },
       optimisticResponse: {
         addTodo: {
