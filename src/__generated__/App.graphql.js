@@ -15,7 +15,14 @@ export type App = {|
 
 
 const fragment /*: ConcreteFragment*/ = {
-  "argumentDefinitions": [],
+  "argumentDefinitions": [
+    {
+      "kind": "LocalArgument",
+      "name": "status",
+      "type": "String",
+      "defaultValue": ""
+    }
+  ],
   "kind": "Fragment",
   "metadata": null,
   "name": "App",
@@ -23,7 +30,14 @@ const fragment /*: ConcreteFragment*/ = {
     {
       "kind": "LinkedField",
       "alias": null,
-      "args": null,
+      "args": [
+        {
+          "kind": "Variable",
+          "name": "status",
+          "variableName": "status",
+          "type": "String"
+        }
+      ],
       "concreteType": "Todo",
       "name": "todos",
       "plural": true,

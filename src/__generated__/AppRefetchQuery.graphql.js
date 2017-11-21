@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash d0cf57f506bb89a58c511f044da93093
+ * @relayHash 76e74f9780c4c414ac6dc8eaba2ce5a6
  */
 
 /* eslint-disable */
@@ -9,21 +9,23 @@
 
 /*::
 import type {ConcreteBatch} from 'relay-runtime';
-export type MainQueryResponse = {|
+export type AppRefetchQueryResponse = {|
   +app: ?{| |};
 |};
 */
 
 
 /*
-query MainQuery {
+query AppRefetchQuery(
+  $status: String
+) {
   app {
-    ...App
+    ...App_lg5YC
   }
 }
 
-fragment App on App {
-  todos(status: "") {
+fragment App_lg5YC on App {
+  todos(status: $status) {
     ...Todo
   }
 }
@@ -37,10 +39,17 @@ fragment Todo on Todo {
 
 const batch /*: ConcreteBatch*/ = {
   "fragment": {
-    "argumentDefinitions": [],
+    "argumentDefinitions": [
+      {
+        "kind": "LocalArgument",
+        "name": "status",
+        "type": "String",
+        "defaultValue": null
+      }
+    ],
     "kind": "Fragment",
     "metadata": null,
-    "name": "MainQuery",
+    "name": "AppRefetchQuery",
     "selections": [
       {
         "kind": "LinkedField",
@@ -53,7 +62,14 @@ const batch /*: ConcreteBatch*/ = {
           {
             "kind": "FragmentSpread",
             "name": "App",
-            "args": null
+            "args": [
+              {
+                "kind": "Variable",
+                "name": "status",
+                "variableName": "status",
+                "type": null
+              }
+            ]
           }
         ],
         "storageKey": null
@@ -64,11 +80,18 @@ const batch /*: ConcreteBatch*/ = {
   "id": null,
   "kind": "Batch",
   "metadata": {},
-  "name": "MainQuery",
+  "name": "AppRefetchQuery",
   "query": {
-    "argumentDefinitions": [],
+    "argumentDefinitions": [
+      {
+        "kind": "LocalArgument",
+        "name": "status",
+        "type": "String",
+        "defaultValue": null
+      }
+    ],
     "kind": "Root",
-    "name": "MainQuery",
+    "name": "AppRefetchQuery",
     "operation": "query",
     "selections": [
       {
@@ -84,9 +107,9 @@ const batch /*: ConcreteBatch*/ = {
             "alias": null,
             "args": [
               {
-                "kind": "Literal",
+                "kind": "Variable",
                 "name": "status",
-                "value": "",
+                "variableName": "status",
                 "type": "String"
               }
             ],
@@ -122,14 +145,14 @@ const batch /*: ConcreteBatch*/ = {
                 ]
               }
             ],
-            "storageKey": "todos{\"status\":\"\"}"
+            "storageKey": null
           }
         ],
         "storageKey": null
       }
     ]
   },
-  "text": "query MainQuery {\n  app {\n    ...App\n  }\n}\n\nfragment App on App {\n  todos(status: \"\") {\n    ...Todo\n  }\n}\n\nfragment Todo on Todo {\n  id\n  title\n  status\n}\n"
+  "text": "query AppRefetchQuery(\n  $status: String\n) {\n  app {\n    ...App_lg5YC\n  }\n}\n\nfragment App_lg5YC on App {\n  todos(status: $status) {\n    ...Todo\n  }\n}\n\nfragment Todo on Todo {\n  id\n  title\n  status\n}\n"
 };
 
 module.exports = batch;

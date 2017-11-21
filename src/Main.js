@@ -1,7 +1,6 @@
 //Don't name file index.js. Some problem while name queries <filename><Query> format
 
 // TODO
-// Arguments for search (clash with mutation)
 // authentication for writes
 // covert to node-edges pattern
 // Pagination

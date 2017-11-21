@@ -10,7 +10,8 @@ const mutation = graphql`
   }
 `
 
-export function commit(environment, title) {
+export function commit(environment, title, args) {
+  console.log("args", args)
   const optimisticID = Math.random().toString(32).substring(2)
   const variables = {
     input: {
@@ -28,19 +29,20 @@ export function commit(environment, title) {
       },
       onError: err => console.error(err),
       updater: (proxyStore, data) => {
-        const rootProxy = proxyStore.getRoot()
-        let appProxy = rootProxy.getLinkedRecord('app')
-        let todosProxy = appProxy.getLinkedRecords('todos')
         let addTodoProxy = proxyStore.getRootField('addTodo')
-        appProxy.setLinkedRecords([...todosProxy, addTodoProxy], 'todos')
-      },
-      optimisticUpdater: (proxyStore) => {
-        const optimisticNodeProxy = proxyStore.get(optimisticID)
         
         const rootProxy = proxyStore.getRoot()
         let appProxy = rootProxy.getLinkedRecord('app')
-        let todosProxy = appProxy.getLinkedRecords('todos')
-        appProxy.setLinkedRecords([...todosProxy, optimisticNodeProxy], 'todos')
+        let todosProxy = appProxy.getLinkedRecords('todos', args)
+        appProxy.setLinkedRecords([...todosProxy, addTodoProxy], 'todos', args)
+      },
+      optimisticUpdater: (proxyStore) => {
+        const optimisticNodeProxy = proxyStore.get(optimisticID)
+
+        const rootProxy = proxyStore.getRoot()
+        let appProxy = rootProxy.getLinkedRecord('app')
+        let todosProxy = appProxy.getLinkedRecords('todos', args)
+        appProxy.setLinkedRecords([...todosProxy, optimisticNodeProxy], 'todos', args)
       },
       optimisticResponse: {
         addTodo: {
