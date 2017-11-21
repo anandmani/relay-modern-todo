@@ -24,7 +24,7 @@ class App extends PureComponent {
   }
 
   render() {
-    console.log("App", this.props.relay.environment.getStore().getSource())
+    console.log("Store Source", this.props.relay.environment.getStore().getSource())
     return (
       <div>
         Todos:

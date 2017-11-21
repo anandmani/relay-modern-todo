@@ -11,7 +11,6 @@ const mutation = graphql`
 `
 
 export function commit(environment, title, args) {
-  console.log("args", args)
   const optimisticID = Math.random().toString(32).substring(2)
   const variables = {
     input: {
