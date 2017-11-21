@@ -5,12 +5,10 @@ import * as DeleteTodoMutation from './mutations/DeleteTodoMutation'
 
 class Todo extends PureComponent {
   handleToggle = () => {
-    console.log("toggling")
     const newStatus = this.props.data.status == 'Active' ? 'Completed' : 'Active'
     UpdateTodoMutation.commit(this.props.relay.environment, this.props.data.id, newStatus)
   }
   handleDelete = () => {
-    console.log("deleting")
     DeleteTodoMutation.commit(this.props.relay.environment, this.props.data.id)
   }
   render() {

@@ -10,7 +10,6 @@ class App extends PureComponent {
   handleAdd = (e) => {
     e.preventDefault()
     let value = this.refs.addRef.value
-    console.log("value", value)
     AddTodoMutation.commit(this.props.relay.environment, value)
     this.refs.addRef.value = ''
   }

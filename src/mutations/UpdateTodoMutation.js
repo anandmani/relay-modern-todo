@@ -22,10 +22,16 @@ export function commit(environment, id, status) {
     {
       mutation,
       variables,
-      onCompleted: (response, errors) => {
+      onCompleted: (response) => {
         console.log("update todo", response)
       },
-      onError: (err) => console.error(err)
+      onError: (err) => console.error(err),
+      optimisticResponse: {
+        updateTodo: {
+          id,
+          status
+        }
+      }
     }
   )
 }

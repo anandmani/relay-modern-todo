@@ -1,5 +1,14 @@
 //Don't name file index.js. Some problem while name queries <filename><Query> format
 
+// TODO
+// Arguments for search (clash with mutation)
+// authentication for writes
+// covert to node-edges pattern
+// Pagination
+// subscription
+// multi environments
+// custom network layer
+
 import ReactDOM from 'react-dom'
 import React, { PureComponent } from 'react'
 import { QueryRenderer, graphql } from 'react-relay'
