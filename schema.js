@@ -93,32 +93,60 @@ export const getResolver = (db) => ({
 
 /* Graphiql queries and mutations:
 
+================================ Queries ================================
+
 {
-  todos(status: "active") {
-    id,
-    title,
-    status
+  app{
+    todos(status: "Active") {
+      id
+      title
+      status
+    }
   }
 }
 
-mutation {
-  deleteTodo(id: "5a0c2b0e93a72851aba392dd")
-}
+================================ Mutations ================================
 
-mutation{
-  updateTodo(id: "5a0c176bf36d283a6cbc1f89", status: "Active"){
+mutation AddTodoMutation($input: TodoInput){
+  addTodo(input: $input){
     id
     title
     status
   }
 }
 
-mutation{
-  addTodo(input: {title: "Dotay", status: "Completed"}){
+{
+  "input": {
+  	"title": "Test123",
+    "status": "Completed"
+	}
+}
+-----------------------------
+
+mutation UpdateTodoMutation($input: UpdateTodoInput){
+  updateTodo(input: $input){
     id
     title
     status
   }
+}
+
+{
+  "input": {
+    "id": "5a13e75dc4e2d52dc1dce453",
+    "status": "Active"
+	}
+}
+------------------------------
+
+mutation DeleteTodoMutation($input: DeleteTodoInput){
+  deleteTodo(input: $input)
+}
+
+{
+  "input": {
+    "id": "5a13e75dc4e2d52dc1dce453"
+	}
 }
 
 */
