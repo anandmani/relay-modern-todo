@@ -17,7 +17,10 @@ let app = express();
 app.use(express.static('public'));
 
 function isAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) return next()
+  if (req.isAuthenticated()) {
+    console.log("auth true", req.user)
+    return next()
+  }
   else res.send('failed')
 }
 
@@ -51,19 +54,24 @@ function isAuthenticated(req, res, next) {
 
       routes(app, db)
 
-      // app.get('/test',
-      //   isAuthenticated,
-      //   function (req, res) {
-      //     res.send({})
-      //   }
-      // )
+      app.get('/test',
+        isAuthenticated,
+        function (req, res) {
+          res.send({})
+        }
+      )
 
-      app.use('/graphql',
-        graphqlHTTP({
-          schema: schema,
-          rootValue: getResolver(db),
-          graphiql: true
-        })
+      app.use(
+        '/graphql',
+        graphqlHTTP(req => {
+          return {
+            schema: schema,
+            rootValue: getResolver(db),
+            graphiql: true,
+            context: req.user ? req.user : {}   //Cannot set it to undefined or null as it just replaced by Incoming network request for some reason
+          }
+        }
+        )
       )
 
       app.listen(3000, () => console.log("Connected to Mongo \nListening on port 3k"))

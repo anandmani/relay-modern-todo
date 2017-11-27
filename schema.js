@@ -48,21 +48,45 @@ class App {
   }
 }
 
+const authenticate = (resolver) => (...args) => {
+  const context = args[1]
+  if (!context.username) {
+    throw "Login to perform writes!"
+  }
+  return resolver(...args)
+}
+
 export const getResolver = (db) => ({
 
   app: () => new App(db),
 
-  addTodo: async ({ input }) => {
-    let { title, status } = input
-    let response = await db.collection('todos').insertOne({ title, status })
-    let todo = response.ops[0]
-    return {
-      id: todo._id,
-      ...todo
-    }
-  },
+  // addTodo: async ({ input }, context) => {   //The Mutation without authentication "as a middleware"
+  //   if (!context.username) {
+  //     throw "Not logged in"
+  //   }
+  //   let { title, status } = input
+  //   let response = await db.collection('todos').insertOne({ title, status })
+  //   let todo = response.ops[0]
+  //   return {
+  //     id: todo._id,
+  //     ...todo
+  //   }
+  // },
 
-  updateTodo: async ({ input }) => {
+  addTodo: authenticate(
+    async ({ input }) => {
+      console.log("addTodo", input)
+      let { title, status } = input
+      let response = await db.collection('todos').insertOne({ title, status })
+      let todo = response.ops[0]
+      return {
+        id: todo._id,
+        ...todo
+      }
+    },
+  ),
+
+  updateTodo: authenticate(async ({ input }) => {
     let { id, status } = input
     let findObj = { _id: new ObjectID(id) }
     let updateObj = { $set: { status } }
@@ -77,9 +101,9 @@ export const getResolver = (db) => ({
         ...todo
       }
     }
-  },
+  }),
 
-  deleteTodo: async ({ input }) => {
+  deleteTodo: authenticate(async ({ input }) => {
     let { id } = input
     let findObj = { _id: new ObjectID(id) }
     try {
@@ -88,7 +112,8 @@ export const getResolver = (db) => ({
       throw (err)
     }
     return "Success"
-  }
+  })
+
 })
 
 /* Graphiql queries and mutations:

@@ -6,8 +6,9 @@ function fetchQuery(operation, variables, cacheConfig, uploadables) {
       method: 'POST',
       headers: {
         //Auth headers
-        'content-type': 'application/json'
+        'content-type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify({
         query: operation.text,
         variables

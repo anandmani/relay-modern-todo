@@ -10,7 +10,7 @@ const mutation = graphql`
   }
 `
 
-export function commit(environment, title, args) {
+export function commit(environment, title, args, errorHandler) {
   const optimisticID = Math.random().toString(32).substring(2)
   const variables = {
     input: {
@@ -23,8 +23,11 @@ export function commit(environment, title, args) {
     {
       mutation,
       variables,
-      onCompleted: (response) => {
+      onCompleted: (response, err) => {
         console.log('add todo mutation', response)
+        if (err) { //If error happens after completion; onError is error before completion?
+          errorHandler(err[0].message)
+        }
       },
       onError: err => console.error(err),
       updater: (proxyStore, data) => {

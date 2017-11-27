@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import { createFragmentContainer, createRefetchContainer, graphql } from 'react-relay'
 import Todo from './Todo'
 import * as AddTodoMutation from './mutations/AddTodoMutation'
-import { login, logout } from './actions'
+import { login, logout, test } from './actions'
 import Cookies from 'js-cookie'
 
 const styles = {
@@ -11,6 +11,8 @@ const styles = {
   green: { color: 'green' },
   red: { color: 'red' }
 }
+
+const errorHandler = (message) => window.alert(message)
 
 class App extends PureComponent {
 
@@ -24,7 +26,7 @@ class App extends PureComponent {
   handleAdd = (e) => {
     e.preventDefault()
     let value = this.refs.addRef.value
-    AddTodoMutation.commit(this.props.relay.environment, value, { status: this.refs.filterRef.value })
+    AddTodoMutation.commit(this.props.relay.environment, value, { status: this.refs.filterRef.value }, errorHandler)
     this.refs.addRef.value = ''
   }
 
@@ -67,7 +69,9 @@ class App extends PureComponent {
               </div>
         }
         <br />
-
+        {
+          <button onClick={test}>Test</button>
+        }
         Todos:
         <br />
         <form onSubmit={this.handleAdd}>

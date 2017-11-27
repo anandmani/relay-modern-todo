@@ -31,9 +31,9 @@ export const logout = () => {
   Cookies.remove('connect.sid')
 }
 
-// export const test = () => fetch('/test', {
-//   method: 'get',
-//   credentials: 'include'  //important! The tells the browser to send cookies along with the request
-// })
-//   .then(parseResponse)
-//   .then(response => console.log("test", response))
+export const test = () => fetch('/test', {
+  method: 'get',
+  credentials: 'include'  //important! The tells the browser to send cookies along with the request
+})
+  .then(parseResponse)
+  .then(response => console.log("test", response))
