@@ -16,13 +16,13 @@ const mongoUrl = 'mongodb://admin:admin@ds151355.mlab.com:51355/rgr'
 let app = express();
 app.use(express.static('public'));
 
-function isAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    console.log("auth true", req.user)
-    return next()
-  }
-  else res.send('failed')
-}
+// function isAuthenticated(req, res, next) {
+//   if (req.isAuthenticated()) {
+//     console.log("auth true", req.user)
+//     return next()
+//   }
+//   else res.send('failed')
+// }
 
 (
   async function connect() {
@@ -54,12 +54,12 @@ function isAuthenticated(req, res, next) {
 
       routes(app, db)
 
-      app.get('/test',
-        isAuthenticated,
-        function (req, res) {
-          res.send({})
-        }
-      )
+      // app.get('/test',
+      //   isAuthenticated,
+      //   function (req, res) {
+      //     res.send({})
+      //   }
+      // )
 
       app.use(
         '/graphql',

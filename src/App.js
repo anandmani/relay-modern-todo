@@ -2,7 +2,10 @@ import React, { PureComponent } from 'react'
 import { createFragmentContainer, createRefetchContainer, graphql } from 'react-relay'
 import Todo from './Todo'
 import * as AddTodoMutation from './mutations/AddTodoMutation'
-import { login, logout, test } from './actions'
+import {
+  login, logout,
+  // test
+} from './actions'
 import Cookies from 'js-cookie'
 
 const styles = {
@@ -70,7 +73,7 @@ class App extends PureComponent {
         }
         <br />
         {
-          <button onClick={test}>Test</button>
+          // <button onClick={test}>Test</button>
         }
         Todos:
         <br />
