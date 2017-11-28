@@ -1,5 +1,5 @@
-import { GraphQLSchema, GraphQLID, GraphQLString, GraphQLObjectType, GraphQLInt, GraphQLList, GraphQLNonNull } from 'graphql'
-import { connectionArgs, connectionType, connectionDefinitions, connectionFromArray, connectionFromPromisedArray, globalIdField, fromGlobalId, toGlobalId, nodeDefinitions } from 'graphql-relay'
+import { GraphQLSchema, GraphQLID, GraphQLString, GraphQLObjectType, GraphQLNonNull } from 'graphql'
+import { connectionArgs, mutationWithClientMutationId, connectionDefinitions, connectionFromPromisedArray, globalIdField, fromGlobalId, toGlobalId, nodeDefinitions } from 'graphql-relay'
 import { ObjectID } from 'mongodb'
 
 export default (db) => {
@@ -40,24 +40,34 @@ export default (db) => {
   const { connectionType: todoConnection } = connectionDefinitions({ nodeType: todoType }) //connectionDefinitions- make a connectionDefinitions from a graphqlObject definition
 
 
-
-  const mutationType = new GraphQLObjectType({
-    name: 'mutation',
-    fields: {
-      addTodo: {
+  const addTodoMutation = mutationWithClientMutationId({
+    name: 'addTodo',
+    inputFields: {
+      title: { type: GraphQLString },
+      status: { type: GraphQLString }
+    },
+    mutateAndGetPayload: async (args) => {
+      let { title, status } = args
+      const response = await db.collection('todos').insertOne({ title, status })
+      return response.ops[0]
+    },
+    outputFields: {
+      todo: {
         type: todoType,
-        args: {
-          title: { type: GraphQLString },
-          status: { type: GraphQLString }
-        },
-        resolve: async (_, args) => {
-          const { title, status } = args
-          const response = await db.collection('todos').insertOne({ title, status })
-          return response.ops[0]
+        resolve: (payload) => { //payload returned in the previous fn
+          return payload
         }
       }
     }
   })
+
+  const mutationType = new GraphQLObjectType({
+    name: 'mutation',
+    fields: {
+      addTodo: addTodoMutation
+    }
+  })
+
 
 
   const queryType = new GraphQLObjectType({
@@ -82,6 +92,7 @@ export default (db) => {
   })
 
 }
+
 
 
 /*
@@ -117,10 +128,13 @@ query{
 
 #3
 mutation {
-  addTodo(title: "testp", status: "Active" ) {
-    id
-    title
-    status
+	addTodo(input: {title: "sample", status: "Active"}){
+    clientMutationId
+    todo{
+      id
+      title
+      status
+    }
   }
 }
 */
