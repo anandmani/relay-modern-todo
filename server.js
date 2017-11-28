@@ -6,7 +6,7 @@ import passport from 'passport'
 import passportConfig from './passportConfig'
 import cookieParser from 'cookie-parser'
 import routes from './routes'
-import { schema, getResolver } from './schema'
+import getSchema from './schema'
 import { MongoClient } from 'mongodb'
 import { graphql } from 'graphql'
 import { introspectionQuery } from 'graphql/utilities'
@@ -61,11 +61,12 @@ app.use(express.static('public'));
       //   }
       // )
 
+      const schema = getSchema(db)
       app.use(
         '/graphql',
         graphqlHTTP(req => {
           return {
-            schema: schema,
+            schema,
             // rootValue: getResolver(db),
             graphiql: true,
             context: req.user ? req.user : {}   //Cannot set it to undefined or null as it just replaced by Incoming network request for some reason
