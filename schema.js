@@ -41,7 +41,7 @@ export default (db) => {
 
 
   const addTodoMutation = mutationWithClientMutationId({
-    name: 'addTodo',
+    name: 'addTodo',  //mandatory field. Esle relay messes up when adding other unnamed mutations
     inputFields: {
       title: { type: GraphQLString },
       status: { type: GraphQLString }
@@ -61,10 +61,51 @@ export default (db) => {
     }
   })
 
+  const updateTodoMutation = mutationWithClientMutationId({
+    name: 'updateTodo',
+    inputFields: {
+      id: { type: GraphQLID },
+      status: { type: GraphQLString }
+    },
+    mutateAndGetPayload: async ({ id, status }) => {
+      let findObj = { _id: new ObjectID(id) }
+      let updateObj = { $set: { status } }
+      let response = await db.collection('todos').findOneAndUpdate(findObj, updateObj, { returnOriginal: false })
+      let { value: todo } = response
+      return todo
+    },
+    outputFields: {
+      todo: {
+        type: todoType,
+        resolve: (payload) => payload
+      }
+    }
+  })
+
+  const deleteTodoMutation = mutationWithClientMutationId({
+    name: 'deleteTodo',
+    inputFields: {
+      id: { type: GraphQLID }
+    },
+    mutateAndGetPayload: async ({ id }) => {
+      let findObj = { _id: new ObjectID(id) }
+      let response = await db.collection('todos').removeOne(findObj)
+      return {} //returning empty obj instead on null, as relay throws an error: "Cannot set clientMutationId of null"
+    },
+    outputFields: {
+      todo: {
+        type: GraphQLString,
+        resolve: _ => "success"
+      }
+    }
+  })
+
   const mutationType = new GraphQLObjectType({
     name: 'mutation',
     fields: {
-      addTodo: addTodoMutation
+      addTodo: addTodoMutation,
+      updateTodo: updateTodoMutation,
+      deleteTodo: deleteTodoMutation
     }
   })
 
@@ -98,7 +139,7 @@ export default (db) => {
 /*
 
 SAMPLE QUERIES:
-#1
+#1  Fetch Todos
 query todosQuery($input: Int){
 	todos(first: $input) {
     pageInfo {
@@ -119,14 +160,14 @@ query todosQuery($input: Int){
 }
 
 
-#2
+#2  Fetch a node alone
 query{
   node(id: "dG9kbzo1YTBjMTc2YmYzNmQyODNhNmNiYzFmODk=") {
 	  id
 	}
 }
 
-#3
+#3  AddTodoMutation
 mutation {
 	addTodo(input: {title: "sample", status: "Active"}){
     clientMutationId
@@ -137,6 +178,25 @@ mutation {
     }
   }
 }
+
+#4 UpdateTodoMutation
+mutation updateTodoMutation{
+  updateTodo(input:{id: "5a1d5c33b9331fe86b180cec",status: "Done"}){
+    todo{
+      id
+      title
+      status
+    }
+  }
+}
+
+#5 DeleteTodoMutation
+mutation{
+  deleteTodo(input:{id: "5a1d5a00b9331fe86b180ceb" }) {
+    todo
+  }
+}
+
 */
 
 

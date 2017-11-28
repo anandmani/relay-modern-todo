@@ -410,6 +410,60 @@
               },
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "updateTodo",
+              "description": null,
+              "args": [
+                {
+                  "name": "input",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "updateTodoInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "updateTodoPayload",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "deleteTodo",
+              "description": null,
+              "args": [
+                {
+                  "name": "input",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "deleteTodoInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "deleteTodoPayload",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "inputFields": null,
@@ -470,6 +524,148 @@
               "type": {
                 "kind": "OBJECT",
                 "name": "todo",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "clientMutationId",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "updateTodoInput",
+          "description": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "id",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "status",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "clientMutationId",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "updateTodoPayload",
+          "description": null,
+          "fields": [
+            {
+              "name": "todo",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "todo",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "clientMutationId",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "deleteTodoInput",
+          "description": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "id",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "clientMutationId",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "deleteTodoPayload",
+          "description": null,
+          "fields": [
+            {
+              "name": "todo",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
                 "ofType": null
               },
               "isDeprecated": false,
