@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash d0cf57f506bb89a58c511f044da93093
+ * @relayHash 22cf7610d1fbd3020c101f32205381aa
  */
 
 /* eslint-disable */
@@ -24,7 +24,12 @@ query MainQuery {
 
 fragment App on App {
   todos(status: "") {
-    ...Todo
+    edges {
+      node {
+        ...Todo
+        id
+      }
+    }
   }
 }
 
@@ -90,36 +95,52 @@ const batch /*: ConcreteBatch*/ = {
                 "type": "String"
               }
             ],
-            "concreteType": "Todo",
+            "concreteType": "TodoConnection",
             "name": "todos",
-            "plural": true,
+            "plural": false,
             "selections": [
               {
-                "kind": "InlineFragment",
-                "type": "Todo",
+                "kind": "LinkedField",
+                "alias": null,
+                "args": null,
+                "concreteType": "TodoEdge",
+                "name": "edges",
+                "plural": true,
                 "selections": [
                   {
-                    "kind": "ScalarField",
+                    "kind": "LinkedField",
                     "alias": null,
                     "args": null,
-                    "name": "id",
-                    "storageKey": null
-                  },
-                  {
-                    "kind": "ScalarField",
-                    "alias": null,
-                    "args": null,
-                    "name": "title",
-                    "storageKey": null
-                  },
-                  {
-                    "kind": "ScalarField",
-                    "alias": null,
-                    "args": null,
-                    "name": "status",
+                    "concreteType": "Todo",
+                    "name": "node",
+                    "plural": false,
+                    "selections": [
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "args": null,
+                        "name": "id",
+                        "storageKey": null
+                      },
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "args": null,
+                        "name": "title",
+                        "storageKey": null
+                      },
+                      {
+                        "kind": "ScalarField",
+                        "alias": null,
+                        "args": null,
+                        "name": "status",
+                        "storageKey": null
+                      }
+                    ],
                     "storageKey": null
                   }
-                ]
+                ],
+                "storageKey": null
               }
             ],
             "storageKey": "todos{\"status\":\"\"}"
@@ -129,7 +150,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "query MainQuery {\n  app {\n    ...App\n  }\n}\n\nfragment App on App {\n  todos(status: \"\") {\n    ...Todo\n  }\n}\n\nfragment Todo on Todo {\n  id\n  title\n  status\n}\n"
+  "text": "query MainQuery {\n  app {\n    ...App\n  }\n}\n\nfragment App on App {\n  todos(status: \"\") {\n    edges {\n      node {\n        ...Todo\n        id\n      }\n    }\n  }\n}\n\nfragment Todo on Todo {\n  id\n  title\n  status\n}\n"
 };
 
 module.exports = batch;

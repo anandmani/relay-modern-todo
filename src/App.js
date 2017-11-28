@@ -24,7 +24,10 @@ class App extends PureComponent {
     loginLoading: false
   }
 
-  renderRow = (todo) => todo ? <Todo key={todo.__id} data={todo} /> : null
+  renderRow = (edge) => {
+    const { node } = edge
+    return node ? <Todo key={node.__id} data={node} /> : null
+  }
 
   handleAdd = (e) => {
     e.preventDefault()
@@ -83,7 +86,7 @@ class App extends PureComponent {
         </form>
         <ul>
           {
-            this.props.data.todos.map(this.renderRow)
+            this.props.data.todos.edges.map(this.renderRow)
           }
         </ul>
 
@@ -113,7 +116,11 @@ export default createRefetchContainer(
   graphql`
     fragment App on App @argumentDefinitions( status: {type: "String", defaultValue: ""}){
       todos(status: $status){
-        ...Todo
+        edges{
+          node{
+            ...Todo
+          }
+        }
       }
     }
   `

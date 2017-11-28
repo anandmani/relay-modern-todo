@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash e9214e7c99ab0f6f8ebec33e92501c99
+ * @relayHash 931b9a17457c3bd40d4884970233d9f7
  */
 
 /* eslint-disable */
@@ -10,16 +10,19 @@
 /*::
 import type {ConcreteBatch} from 'relay-runtime';
 export type UpdateTodoMutationVariables = {|
-  input?: ?{
-    id: string;
-    status: string;
+  input: {
+    id?: ?string;
+    status?: ?string;
+    clientMutationId?: ?string;
   };
 |};
 export type UpdateTodoMutationResponse = {|
   +updateTodo: ?{|
-    +id: string;
-    +title: string;
-    +status: string;
+    +todo: ?{|
+      +id: string;
+      +title: ?string;
+      +status: ?string;
+    |};
   |};
 |};
 */
@@ -27,12 +30,14 @@ export type UpdateTodoMutationResponse = {|
 
 /*
 mutation UpdateTodoMutation(
-  $input: UpdateTodoInput
+  $input: UpdateTodoInput!
 ) {
   updateTodo(input: $input) {
-    id
-    title
-    status
+    todo {
+      id
+      title
+      status
+    }
   }
 }
 */
@@ -43,7 +48,7 @@ const batch /*: ConcreteBatch*/ = {
       {
         "kind": "LocalArgument",
         "name": "input",
-        "type": "UpdateTodoInput",
+        "type": "UpdateTodoInput!",
         "defaultValue": null
       }
     ],
@@ -59,32 +64,43 @@ const batch /*: ConcreteBatch*/ = {
             "kind": "Variable",
             "name": "input",
             "variableName": "input",
-            "type": "UpdateTodoInput"
+            "type": "UpdateTodoInput!"
           }
         ],
-        "concreteType": "Todo",
+        "concreteType": "UpdateTodoPayload",
         "name": "updateTodo",
         "plural": false,
         "selections": [
           {
-            "kind": "ScalarField",
+            "kind": "LinkedField",
             "alias": null,
             "args": null,
-            "name": "id",
-            "storageKey": null
-          },
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "args": null,
-            "name": "title",
-            "storageKey": null
-          },
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "args": null,
-            "name": "status",
+            "concreteType": "Todo",
+            "name": "todo",
+            "plural": false,
+            "selections": [
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "id",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "title",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "status",
+                "storageKey": null
+              }
+            ],
             "storageKey": null
           }
         ],
@@ -102,7 +118,7 @@ const batch /*: ConcreteBatch*/ = {
       {
         "kind": "LocalArgument",
         "name": "input",
-        "type": "UpdateTodoInput",
+        "type": "UpdateTodoInput!",
         "defaultValue": null
       }
     ],
@@ -118,32 +134,43 @@ const batch /*: ConcreteBatch*/ = {
             "kind": "Variable",
             "name": "input",
             "variableName": "input",
-            "type": "UpdateTodoInput"
+            "type": "UpdateTodoInput!"
           }
         ],
-        "concreteType": "Todo",
+        "concreteType": "UpdateTodoPayload",
         "name": "updateTodo",
         "plural": false,
         "selections": [
           {
-            "kind": "ScalarField",
+            "kind": "LinkedField",
             "alias": null,
             "args": null,
-            "name": "id",
-            "storageKey": null
-          },
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "args": null,
-            "name": "title",
-            "storageKey": null
-          },
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "args": null,
-            "name": "status",
+            "concreteType": "Todo",
+            "name": "todo",
+            "plural": false,
+            "selections": [
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "id",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "title",
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "args": null,
+                "name": "status",
+                "storageKey": null
+              }
+            ],
             "storageKey": null
           }
         ],
@@ -151,7 +178,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "mutation UpdateTodoMutation(\n  $input: UpdateTodoInput\n) {\n  updateTodo(input: $input) {\n    id\n    title\n    status\n  }\n}\n"
+  "text": "mutation UpdateTodoMutation(\n  $input: UpdateTodoInput!\n) {\n  updateTodo(input: $input) {\n    todo {\n      id\n      title\n      status\n    }\n  }\n}\n"
 };
 
 module.exports = batch;

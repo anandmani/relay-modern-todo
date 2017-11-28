@@ -1,11 +1,13 @@
 import { commitMutation, graphql } from 'react-relay'
 
 const mutation = graphql`
-  mutation UpdateTodoMutation($input: UpdateTodoInput){
+  mutation UpdateTodoMutation($input: UpdateTodoInput!){
     updateTodo(input: $input){
-      id
-      title
-      status
+      todo{
+        id
+        title
+        status
+      }
     }
   }
 `

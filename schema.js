@@ -116,9 +116,17 @@ export default (db) => {
       todos: {
         id: globalIdField('todos'),
         type: todoConnection,
-        args: connectionArgs, //params for pagination
+        args: {
+          ...connectionArgs,
+          status: { type: GraphQLString }
+        },
         resolve: (_, args) => {
-          const todosPromise = db.collection('todos').find({}).toArray()
+          const { status } = args
+          const findObj = {}
+          if (status) {
+            findObj.status = new RegExp(status, 'i')
+          }
+          const todosPromise = db.collection('todos').find(findObj).toArray()
           return connectionFromPromisedArray(todosPromise, args) //connectionFromArray: take an array and make it edges[node{}]
         }
       }
@@ -131,7 +139,7 @@ export default (db) => {
       node: nodeField,        //Fetch any deeply nested node alone, with a globalID
       app: {
         type: appType,
-        resolve: () => ({}) 
+        resolve: () => ({})
       }
     }
   })

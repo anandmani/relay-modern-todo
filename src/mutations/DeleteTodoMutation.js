@@ -1,8 +1,10 @@
 import { commitMutation, graphql } from 'react-relay'
 
 const mutation = graphql`
-  mutation DeleteTodoMutation($input: DeleteTodoInput){
-    deleteTodo(input: $input)
+  mutation DeleteTodoMutation($input: DeleteTodoInput!){
+    deleteTodo(input: $input){
+      todo
+    }
   }
 `
 export function commit(environment, id) {

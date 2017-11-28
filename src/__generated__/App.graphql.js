@@ -9,7 +9,11 @@
 /*::
 import type {ConcreteFragment} from 'relay-runtime';
 export type App = {|
-  +todos: ?$ReadOnlyArray<?{| |}>;
+  +todos: ?{|
+    +edges: ?$ReadOnlyArray<?{|
+      +node: ?{| |};
+    |}>;
+  |};
 |};
 */
 
@@ -38,14 +42,36 @@ const fragment /*: ConcreteFragment*/ = {
           "type": "String"
         }
       ],
-      "concreteType": "Todo",
+      "concreteType": "TodoConnection",
       "name": "todos",
-      "plural": true,
+      "plural": false,
       "selections": [
         {
-          "kind": "FragmentSpread",
-          "name": "Todo",
-          "args": null
+          "kind": "LinkedField",
+          "alias": null,
+          "args": null,
+          "concreteType": "TodoEdge",
+          "name": "edges",
+          "plural": true,
+          "selections": [
+            {
+              "kind": "LinkedField",
+              "alias": null,
+              "args": null,
+              "concreteType": "Todo",
+              "name": "node",
+              "plural": false,
+              "selections": [
+                {
+                  "kind": "FragmentSpread",
+                  "name": "Todo",
+                  "args": null
+                }
+              ],
+              "storageKey": null
+            }
+          ],
+          "storageKey": null
         }
       ],
       "storageKey": null

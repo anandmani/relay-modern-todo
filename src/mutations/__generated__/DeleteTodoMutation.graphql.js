@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 5bffee26f76b1b25c38be9625e7d0f69
+ * @relayHash 9a3c07f128d8fe29575ce8a901354257
  */
 
 /* eslint-disable */
@@ -10,21 +10,26 @@
 /*::
 import type {ConcreteBatch} from 'relay-runtime';
 export type DeleteTodoMutationVariables = {|
-  input?: ?{
-    id: string;
+  input: {
+    id?: ?string;
+    clientMutationId?: ?string;
   };
 |};
 export type DeleteTodoMutationResponse = {|
-  +deleteTodo: ?string;
+  +deleteTodo: ?{|
+    +todo: ?string;
+  |};
 |};
 */
 
 
 /*
 mutation DeleteTodoMutation(
-  $input: DeleteTodoInput
+  $input: DeleteTodoInput!
 ) {
-  deleteTodo(input: $input)
+  deleteTodo(input: $input) {
+    todo
+  }
 }
 */
 
@@ -34,7 +39,7 @@ const batch /*: ConcreteBatch*/ = {
       {
         "kind": "LocalArgument",
         "name": "input",
-        "type": "DeleteTodoInput",
+        "type": "DeleteTodoInput!",
         "defaultValue": null
       }
     ],
@@ -43,17 +48,28 @@ const batch /*: ConcreteBatch*/ = {
     "name": "DeleteTodoMutation",
     "selections": [
       {
-        "kind": "ScalarField",
+        "kind": "LinkedField",
         "alias": null,
         "args": [
           {
             "kind": "Variable",
             "name": "input",
             "variableName": "input",
-            "type": "DeleteTodoInput"
+            "type": "DeleteTodoInput!"
           }
         ],
+        "concreteType": "DeleteTodoPayload",
         "name": "deleteTodo",
+        "plural": false,
+        "selections": [
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "args": null,
+            "name": "todo",
+            "storageKey": null
+          }
+        ],
         "storageKey": null
       }
     ],
@@ -68,7 +84,7 @@ const batch /*: ConcreteBatch*/ = {
       {
         "kind": "LocalArgument",
         "name": "input",
-        "type": "DeleteTodoInput",
+        "type": "DeleteTodoInput!",
         "defaultValue": null
       }
     ],
@@ -77,22 +93,33 @@ const batch /*: ConcreteBatch*/ = {
     "operation": "mutation",
     "selections": [
       {
-        "kind": "ScalarField",
+        "kind": "LinkedField",
         "alias": null,
         "args": [
           {
             "kind": "Variable",
             "name": "input",
             "variableName": "input",
-            "type": "DeleteTodoInput"
+            "type": "DeleteTodoInput!"
           }
         ],
+        "concreteType": "DeleteTodoPayload",
         "name": "deleteTodo",
+        "plural": false,
+        "selections": [
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "args": null,
+            "name": "todo",
+            "storageKey": null
+          }
+        ],
         "storageKey": null
       }
     ]
   },
-  "text": "mutation DeleteTodoMutation(\n  $input: DeleteTodoInput\n) {\n  deleteTodo(input: $input)\n}\n"
+  "text": "mutation DeleteTodoMutation(\n  $input: DeleteTodoInput!\n) {\n  deleteTodo(input: $input) {\n    todo\n  }\n}\n"
 };
 
 module.exports = batch;
