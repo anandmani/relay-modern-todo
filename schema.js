@@ -39,6 +39,27 @@ export default (db) => {
 
   const { connectionType: todoConnection } = connectionDefinitions({ nodeType: todoType }) //connectionDefinitions- make a connectionDefinitions from a graphqlObject definition
 
+
+
+  const mutationType = new GraphQLObjectType({
+    name: 'mutation',
+    fields: {
+      addTodo: {
+        type: todoType,
+        args: {
+          title: { type: GraphQLString },
+          status: { type: GraphQLString }
+        },
+        resolve: async (_, args) => {
+          const { title, status } = args
+          const response = await db.collection('todos').insertOne({ title, status })
+          return response.ops[0]
+        }
+      }
+    }
+  })
+
+
   const queryType = new GraphQLObjectType({
     name: 'query',
     fields: {
@@ -56,7 +77,8 @@ export default (db) => {
   })
 
   return new GraphQLSchema({
-    query: queryType
+    query: queryType,
+    mutation: mutationType
   })
 
 }
@@ -81,6 +103,11 @@ query todosQuery($input: Int){
 	}
 }
 
+{
+  "input": 4
+}
+
+
 #2
 query{
   node(id: "dG9kbzo1YTBjMTc2YmYzNmQyODNhNmNiYzFmODk=") {
@@ -88,6 +115,14 @@ query{
 	}
 }
 
+#3
+mutation {
+  addTodo(title: "testp", status: "Active" ) {
+    id
+    title
+    status
+  }
+}
 */
 
 
