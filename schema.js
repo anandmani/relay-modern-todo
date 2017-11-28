@@ -1,72 +1,60 @@
-import { GraphQLSchema, GraphQLID, GraphQLString, GraphQLObjectType, GraphQLInt, GraphQLList } from 'graphql'
-
+import { GraphQLSchema, GraphQLID, GraphQLString, GraphQLObjectType, GraphQLInt, GraphQLList, GraphQLNonNull } from 'graphql'
+import { connectionArgs, connectionType, connectionDefinitions, connectionFromArray, globalIdField, fromGlobalId, nodeDefinitions } from 'graphql-relay'
 import { ObjectID } from 'mongodb'
 
 const todos = [
-  { id: 0, title: 'Hello' },
-  { id: 1, title: 'World' },
-  { id: 2, title: 'World' },
-  { id: 3, title: 'World' },
-  { id: 4, title: 'World' }
+  { id: 0, title: 'a' },
+  { id: 1, title: 'b' },
+  { id: 2, title: 'c' },
+  { id: 3, title: 'd' },
+  { id: 4, title: 'e' }
 ]
-
 
 const todoType = new GraphQLObjectType({
   name: 'todo',
   fields: {
-    id: { type: GraphQLInt },
+    id: { type: new GraphQLNonNull(GraphQLID) },
     title: { type: GraphQLString }
   }
 })
 
-const mutationType = new GraphQLObjectType({
-  name: 'mutation',
-  fields: {
-    addTodo: {
-      type: new GraphQLList(todoType),
-      args: {
-        title: { type: GraphQLString }
-      },
-      resolve: (_, args) => {
-        const { title } = args
-        todos.push({
-          id: todos.length,
-          title
-        })
-        return todos
-      }
-    }
-  }
-})
+
+const { connectionType: todoConnection } = connectionDefinitions({ name: 'todo', nodeType: todoType }) //connectionDefinitions- make a connectionDefinitions from a graphqlObject definition
+
 
 const queryType = new GraphQLObjectType({
   name: 'query',
   fields: {
     todos: {
-      type: new GraphQLList(todoType),
-      resolve: () => todos
+      id: globalIdField('todos'),
+      type: todoConnection,
+      args: connectionArgs, //params for pagination
+      resolve: (_, args) => connectionFromArray(todos, args) //connectionFromArray: take an array and make it edges[node{}]
     }
   }
 })
 
 export const schema = new GraphQLSchema({
   query: queryType,
-  mutation: mutationType
 })
 
 
 /*
 query{
-	todos {
-	  id
-    title
+	todos (first: 2, after: "YXJyYXljb25uZWN0aW9uOjE"){
+    pageInfo {
+      startCursor
+      endCursor
+    }
+	  edges {
+	    node {
+	      id
+        title
+	    }
+	  }
 	}
 }
-
-mutation{
-  addTodo(title: "lol") {
-    id
-    title
-  }
-}
 */
+
+
+
