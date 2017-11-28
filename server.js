@@ -66,7 +66,7 @@ app.use(express.static('public'));
         graphqlHTTP(req => {
           return {
             schema: schema,
-            rootValue: getResolver(db),
+            // rootValue: getResolver(db),
             graphiql: true,
             context: req.user ? req.user : {}   //Cannot set it to undefined or null as it just replaced by Incoming network request for some reason
           }
