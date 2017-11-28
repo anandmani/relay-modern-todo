@@ -2,16 +2,16 @@
   "data": {
     "__schema": {
       "queryType": {
-        "name": "query"
+        "name": "Query"
       },
       "mutationType": {
-        "name": "mutation"
+        "name": "Mutation"
       },
       "subscriptionType": null,
       "types": [
         {
           "kind": "OBJECT",
-          "name": "query",
+          "name": "Query",
           "description": null,
           "fields": [
             {
@@ -42,53 +42,12 @@
               "deprecationReason": null
             },
             {
-              "name": "todos",
+              "name": "app",
               "description": null,
-              "args": [
-                {
-                  "name": "after",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "first",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "before",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "last",
-                  "description": null,
-                  "type": {
-                    "kind": "SCALAR",
-                    "name": "Int",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
-                "name": "todoConnection",
+                "name": "App",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -138,10 +97,74 @@
           "possibleTypes": [
             {
               "kind": "OBJECT",
-              "name": "todo",
+              "name": "Todo",
               "ofType": null
             }
           ]
+        },
+        {
+          "kind": "OBJECT",
+          "name": "App",
+          "description": null,
+          "fields": [
+            {
+              "name": "todos",
+              "description": null,
+              "args": [
+                {
+                  "name": "after",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "first",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "before",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "last",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "TodoConnection",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
         },
         {
           "kind": "SCALAR",
@@ -165,7 +188,7 @@
         },
         {
           "kind": "OBJECT",
-          "name": "todoConnection",
+          "name": "TodoConnection",
           "description": "A connection to a list of items.",
           "fields": [
             {
@@ -193,7 +216,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "OBJECT",
-                  "name": "todoEdge",
+                  "name": "TodoEdge",
                   "ofType": null
                 }
               },
@@ -285,7 +308,7 @@
         },
         {
           "kind": "OBJECT",
-          "name": "todoEdge",
+          "name": "TodoEdge",
           "description": "An edge in a connection.",
           "fields": [
             {
@@ -294,7 +317,7 @@
               "args": [],
               "type": {
                 "kind": "OBJECT",
-                "name": "todo",
+                "name": "Todo",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -324,7 +347,7 @@
         },
         {
           "kind": "OBJECT",
-          "name": "todo",
+          "name": "Todo",
           "description": null,
           "fields": [
             {
@@ -381,7 +404,7 @@
         },
         {
           "kind": "OBJECT",
-          "name": "mutation",
+          "name": "Mutation",
           "description": null,
           "fields": [
             {
@@ -396,7 +419,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "INPUT_OBJECT",
-                      "name": "addTodoInput",
+                      "name": "AddTodoInput",
                       "ofType": null
                     }
                   },
@@ -405,7 +428,7 @@
               ],
               "type": {
                 "kind": "OBJECT",
-                "name": "addTodoPayload",
+                "name": "AddTodoPayload",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -423,7 +446,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "INPUT_OBJECT",
-                      "name": "updateTodoInput",
+                      "name": "UpdateTodoInput",
                       "ofType": null
                     }
                   },
@@ -432,7 +455,7 @@
               ],
               "type": {
                 "kind": "OBJECT",
-                "name": "updateTodoPayload",
+                "name": "UpdateTodoPayload",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -450,7 +473,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "INPUT_OBJECT",
-                      "name": "deleteTodoInput",
+                      "name": "DeleteTodoInput",
                       "ofType": null
                     }
                   },
@@ -459,7 +482,7 @@
               ],
               "type": {
                 "kind": "OBJECT",
-                "name": "deleteTodoPayload",
+                "name": "DeleteTodoPayload",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -473,7 +496,7 @@
         },
         {
           "kind": "INPUT_OBJECT",
-          "name": "addTodoInput",
+          "name": "AddTodoInput",
           "description": null,
           "fields": null,
           "inputFields": [
@@ -514,7 +537,7 @@
         },
         {
           "kind": "OBJECT",
-          "name": "addTodoPayload",
+          "name": "AddTodoPayload",
           "description": null,
           "fields": [
             {
@@ -523,7 +546,7 @@
               "args": [],
               "type": {
                 "kind": "OBJECT",
-                "name": "todo",
+                "name": "Todo",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -549,7 +572,7 @@
         },
         {
           "kind": "INPUT_OBJECT",
-          "name": "updateTodoInput",
+          "name": "UpdateTodoInput",
           "description": null,
           "fields": null,
           "inputFields": [
@@ -590,7 +613,7 @@
         },
         {
           "kind": "OBJECT",
-          "name": "updateTodoPayload",
+          "name": "UpdateTodoPayload",
           "description": null,
           "fields": [
             {
@@ -599,7 +622,7 @@
               "args": [],
               "type": {
                 "kind": "OBJECT",
-                "name": "todo",
+                "name": "Todo",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -625,7 +648,7 @@
         },
         {
           "kind": "INPUT_OBJECT",
-          "name": "deleteTodoInput",
+          "name": "DeleteTodoInput",
           "description": null,
           "fields": null,
           "inputFields": [
@@ -656,7 +679,7 @@
         },
         {
           "kind": "OBJECT",
-          "name": "deleteTodoPayload",
+          "name": "DeleteTodoPayload",
           "description": null,
           "fields": [
             {

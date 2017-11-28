@@ -4,7 +4,7 @@ import { ObjectID } from 'mongodb'
 
 export default (db) => {
 
-  // console.log("globalid", toGlobalId("todo", "5a0c176bf36d283a6cbc1f89"))
+  console.log("globalid", toGlobalId("Todo", "5a0c176bf36d283a6cbc1f89"))
 
   const getTodo = (id) => db.collection('todos').findOne({ _id: new ObjectID(id) })
 
@@ -13,7 +13,7 @@ export default (db) => {
   const { nodeInterface, nodeField } = nodeDefinitions(
     async (globalId) => {                                               //Resolving the object, given a gloablID
       const { type, id } = fromGlobalId(globalId)
-      if (type === 'todo') {
+      if (type === 'Todo') {
         const obj = await getTodo(id)
         return obj
       }
@@ -24,7 +24,7 @@ export default (db) => {
   )
 
   const todoType = new GraphQLObjectType({
-    name: 'todo',
+    name: 'Todo',
     fields: {
       id: {                                                       //Relay needs an id field to use as localId, so we need to resolve _id to id
         type: new GraphQLNonNull(GraphQLID),
@@ -41,7 +41,7 @@ export default (db) => {
 
 
   const addTodoMutation = mutationWithClientMutationId({
-    name: 'addTodo',  //mandatory field. Esle relay messes up when adding other unnamed mutations
+    name: 'AddTodo',  //mandatory field. Esle relay messes up when adding other unnamed mutations
     inputFields: {
       title: { type: GraphQLString },
       status: { type: GraphQLString }
@@ -62,7 +62,7 @@ export default (db) => {
   })
 
   const updateTodoMutation = mutationWithClientMutationId({
-    name: 'updateTodo',
+    name: 'UpdateTodo',
     inputFields: {
       id: { type: GraphQLID },
       status: { type: GraphQLString }
@@ -83,7 +83,7 @@ export default (db) => {
   })
 
   const deleteTodoMutation = mutationWithClientMutationId({
-    name: 'deleteTodo',
+    name: 'DeleteTodo',
     inputFields: {
       id: { type: GraphQLID }
     },
@@ -101,7 +101,7 @@ export default (db) => {
   })
 
   const mutationType = new GraphQLObjectType({
-    name: 'mutation',
+    name: 'Mutation',
     fields: {
       addTodo: addTodoMutation,
       updateTodo: updateTodoMutation,
@@ -110,11 +110,9 @@ export default (db) => {
   })
 
 
-
-  const queryType = new GraphQLObjectType({
-    name: 'query',
+  const appType = new GraphQLObjectType({
+    name: 'App',
     fields: {
-      node: nodeField,        //Fetch any deeply nested node alone, with a globalID
       todos: {
         id: globalIdField('todos'),
         type: todoConnection,
@@ -123,6 +121,17 @@ export default (db) => {
           const todosPromise = db.collection('todos').find({}).toArray()
           return connectionFromPromisedArray(todosPromise, args) //connectionFromArray: take an array and make it edges[node{}]
         }
+      }
+    }
+  })
+
+  const queryType = new GraphQLObjectType({
+    name: 'Query',
+    fields: {
+      node: nodeField,        //Fetch any deeply nested node alone, with a globalID
+      app: {
+        type: appType,
+        resolve: () => ({}) 
       }
     }
   })
@@ -140,29 +149,23 @@ export default (db) => {
 
 SAMPLE QUERIES:
 #1  Fetch Todos
-query todosQuery($input: Int){
-	todos(first: $input) {
-    pageInfo {
-      startCursor
-      endCursor
-    }
-	  edges {
-	    node {
-	      id
-        title
-	    }
-	  }
-	}
-}
-
-{
-  "input": 4
+query todosQuery{
+  app{
+		todos {
+		  edges {
+		    node {
+		      id
+          title
+		    }
+		  }
+		}
+  }
 }
 
 
 #2  Fetch a node alone
 query{
-  node(id: "dG9kbzo1YTBjMTc2YmYzNmQyODNhNmNiYzFmODk=") {
+	node(id: "VG9kbzo1YTBjMTc2YmYzNmQyODNhNmNiYzFmODk=") {
 	  id
 	}
 }
